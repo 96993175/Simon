@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simon Game Pro</title>
+  <link rel="stylesheet" href="simon.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body data-theme="dark">
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <h1 class="game-title">
+        <i class="fas fa-gamepad"></i>
+        Simon Game Pro
+      </h1>
+      <div class="header-controls">
+        <button id="settings-btn" class="icon-btn" title="Settings">
+          <i class="fas fa-cog"></i>
+        </button>
+        <button id="theme-toggle" class="icon-btn" title="Toggle Theme">
+          <i class="fas fa-palette"></i>
+        </button>
+        <button id="sound-toggle" class="icon-btn" title="Toggle Sound">
+          <i class="fas fa-volume-up"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Game Stats -->
+  <div class="game-stats">
+    <div class="stat-item">
+      <span class="stat-label">Level</span>
+      <span id="current-level" class="stat-value">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Score</span>
+      <span id="current-score" class="stat-value">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Best</span>
+      <span id="high-score" class="stat-value">0</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-label">Streak</span>
+      <span id="streak" class="stat-value">0</span>
+    </div>
+  </div>
+
+  <!-- Game Status -->
+  <div class="game-status">
+    <h2 id="level-title" class="status-text">Press Start to Begin</h2>
+    <div id="progress-bar" class="progress-bar">
+      <div id="progress-fill" class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Game Mode Selector -->
+  <div class="game-mode-selector">
+    <h3>Game Mode</h3>
+    <div class="mode-grid">
+      <button class="mode-btn active" data-mode="classic">
+        <i class="fas fa-gamepad"></i>
+        <span>Classic</span>
+      </button>
+      <button class="mode-btn" data-mode="speedrun">
+        <i class="fas fa-bolt"></i>
+        <span>Speed Run</span>
+      </button>
+      <button class="mode-btn" data-mode="survival">
+        <i class="fas fa-heart"></i>
+        <span>Survival</span>
+      </button>
+      <button class="mode-btn" data-mode="memory">
+        <i class="fas fa-brain"></i>
+        <span>Memory Training</span>
+      </button>
+      <button class="mode-btn" data-mode="multiplayer">
+        <i class="fas fa-users"></i>
+        <span>Multiplayer</span>
+      </button>
+      <button class="mode-btn" data-mode="ai">
+        <i class="fas fa-robot"></i>
+        <span>vs AI</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Game Controls -->
+  <div class="game-controls">
+    <button id="start-btn" class="control-btn primary">
+      <i class="fas fa-play"></i>
+      Start Game
+    </button>
+    <button id="pause-btn" class="control-btn" disabled>
+      <i class="fas fa-pause"></i>
+      Pause
+    </button>
+    <button id="reset-btn" class="control-btn">
+      <i class="fas fa-refresh"></i>
+      Reset
+    </button>
+    <button id="record-btn" class="control-btn">
+      <i class="fas fa-video"></i>
+      Record
+    </button>
+  </div>
+
+  <!-- Difficulty Selector -->
+  <div class="difficulty-selector">
+    <label for="difficulty">Difficulty:</label>
+    <select id="difficulty" class="difficulty-select">
+      <option value="easy">Easy (800ms)</option>
+      <option value="normal" selected>Normal (600ms)</option>
+      <option value="hard">Hard (400ms)</option>
+      <option value="expert">Expert (200ms)</option>
+    </select>
+  </div>
+
+  <!-- Game Board -->
+  <div class="game-board">
+    <div class="simon-container">
+      <div class="btn green" id="green" data-color="green" data-sound="1">
+        <div class="btn-inner">
+          <i class="fas fa-leaf"></i>
+        </div>
+      </div>
+      <div class="btn red" id="red" data-color="red" data-sound="2">
+        <div class="btn-inner">
+          <i class="fas fa-fire"></i>
+        </div>
+      </div>
+      <div class="btn yellow" id="yellow" data-color="yellow" data-sound="3">
+        <div class="btn-inner">
+          <i class="fas fa-sun"></i>
+        </div>
+      </div>
+      <div class="btn blue" id="blue" data-color="blue" data-sound="4">
+        <div class="btn-inner">
+          <i class="fas fa-water"></i>
+        </div>
+      </div>
+      
+      <!-- Center Circle -->
+      <div class="center-circle">
+        <div class="logo">
+          <i class="fas fa-bolt"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Advanced Stats Panel -->
+  <div class="advanced-stats">
+    <div class="stat-row">
+      <div class="stat-card">
+        <i class="fas fa-clock"></i>
+        <span class="stat-label">Reaction Time</span>
+        <span id="reaction-time" class="stat-value">0ms</span>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-chart-line"></i>
+        <span class="stat-label">Accuracy</span>
+        <span id="accuracy" class="stat-value">100%</span>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-fire"></i>
+        <span class="stat-label">Combo</span>
+        <span id="combo" class="stat-value">0x</span>
+      </div>
+      <div class="stat-card">
+        <i class="fas fa-star"></i>
+        <span class="stat-label">Rank</span>
+        <span id="player-rank" class="stat-value">Rookie</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Power-ups -->
+  <div class="powerups" id="powerups">
+    <h3>Power-ups & Abilities</h3>
+    <div class="powerup-grid">
+      <button class="powerup-btn" id="slow-time" data-powerup="slow">
+        <i class="fas fa-clock"></i>
+        <span>Slow Time</span>
+        <div class="cooldown" id="slow-cooldown"></div>
+      </button>
+      <button class="powerup-btn" id="skip-turn" data-powerup="skip">
+        <i class="fas fa-forward"></i>
+        <span>Skip Turn</span>
+        <div class="cooldown" id="skip-cooldown"></div>
+      </button>
+      <button class="powerup-btn" id="hint" data-powerup="hint">
+        <i class="fas fa-lightbulb"></i>
+        <span>Hint</span>
+        <div class="cooldown" id="hint-cooldown"></div>
+      </button>
+      <button class="powerup-btn" id="shield" data-powerup="shield">
+        <i class="fas fa-shield"></i>
+        <span>Shield</span>
+        <div class="cooldown" id="shield-cooldown"></div>
+      </button>
+      <button class="powerup-btn" id="double-points" data-powerup="double">
+        <i class="fas fa-gem"></i>
+        <span>2x Points</span>
+        <div class="cooldown" id="double-cooldown"></div>
+      </button>
+      <button class="powerup-btn" id="reveal" data-powerup="reveal">
+        <i class="fas fa-eye"></i>
+        <span>Reveal All</span>
+        <div class="cooldown" id="reveal-cooldown"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Settings</h3>
+        <button class="modal-close" id="close-settings">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-group">
+          <label for="master-volume">Master Volume</label>
+          <input type="range" id="master-volume" min="0" max="100" value="70">
+          <span id="volume-value">70%</span>
+        </div>
+        <div class="setting-group">
+          <label for="speed-multiplier">Speed Multiplier</label>
+          <input type="range" id="speed-multiplier" min="0.5" max="2" step="0.1" value="1">
+          <span id="speed-value">1.0x</span>
+        </div>
+        <div class="setting-group">
+          <label>
+            <input type="checkbox" id="auto-advance"> Auto-advance levels
+          </label>
+        </div>
+        <div class="setting-group">
+          <label>
+            <input type="checkbox" id="show-sequence"> Show sequence numbers
+          </label>
+        </div>
+        <div class="setting-group">
+          <button id="reset-stats" class="control-btn">Reset All Statistics</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Achievement Toast -->
+  <div id="achievement-toast" class="achievement-toast">
+    <div class="achievement-content">
+      <i class="fas fa-trophy"></i>
+      <div class="achievement-text">
+        <div class="achievement-title"></div>
+        <div class="achievement-desc"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Multiplayer Panel -->
+  <div id="multiplayer-panel" class="multiplayer-panel hidden">
+    <div class="player-section">
+      <h3>Player 1</h3>
+      <div class="player-stats">
+        <div class="player-avatar">
+          <i class="fas fa-user"></i>
+        </div>
+        <div class="player-info">
+          <div class="player-name">You</div>
+          <div class="player-score">Score: <span id="p1-score">0</span></div>
+          <div class="player-level">Level: <span id="p1-level">0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="vs-divider">
+      <i class="fas fa-sword"></i>
+      <span>VS</span>
+    </div>
+    <div class="player-section">
+      <h3>Player 2 / AI</h3>
+      <div class="player-stats">
+        <div class="player-avatar ai">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="player-info">
+          <div class="player-name">AI Opponent</div>
+          <div class="player-score">Score: <span id="p2-score">0</span></div>
+          <div class="player-level">Level: <span id="p2-level">0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pattern Recording Panel -->
+  <div id="pattern-panel" class="pattern-panel hidden">
+    <h3>Pattern Recorder</h3>
+    <div class="pattern-controls">
+      <button id="save-pattern" class="pattern-btn">
+        <i class="fas fa-save"></i> Save Pattern
+      </button>
+      <button id="load-pattern" class="pattern-btn">
+        <i class="fas fa-folder-open"></i> Load Pattern
+      </button>
+      <button id="share-pattern" class="pattern-btn">
+        <i class="fas fa-share"></i> Share Pattern
+      </button>
+    </div>
+    <div class="saved-patterns" id="saved-patterns">
+      <!-- Saved patterns will be populated here -->
+    </div>
+  </div>
+
+  <!-- Advanced Effects Container -->
+  <div id="effects-container">
+    <div id="particles"></div>
+    <div id="lightning-effects"></div>
+    <div id="combo-effects"></div>
+    <canvas id="background-canvas"></canvas>
+  </div>
+
+  <!-- Voice Command Indicator -->
+  <div id="voice-indicator" class="voice-indicator hidden">
+    <i class="fas fa-microphone"></i>
+    <span>Listening...</span>
+    <div class="voice-wave"></div>
+  </div>
+
+  <!-- Leaderboard Modal -->
+  <div id="leaderboard-modal" class="modal">
+    <div class="modal-content leaderboard-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-trophy"></i> Global Leaderboard</h3>
+        <button class="modal-close" id="close-leaderboard">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="leaderboard-tabs">
+          <button class="tab-btn active" data-tab="daily">Daily</button>
+          <button class="tab-btn" data-tab="weekly">Weekly</button>
+          <button class="tab-btn" data-tab="alltime">All Time</button>
+        </div>
+        <div class="leaderboard-list" id="leaderboard-list">
+          <!-- Leaderboard entries will be populated here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="simon.js"></script>
+</body>
+</html>
